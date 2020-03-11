@@ -11,17 +11,25 @@
   <div>
     Hello there
   </div>
+  <pre id="logs"></pre>
   <div id="camera-root">
     <video id="video"></video>
   </div>
 
   <script>
     const video = document.getElementById("video");
+    const logs = document.getElementById("logs");
 
     function loadStream (video) {
       return new Promise((resolve, reject) => {
         video.addEventListener('loadeddata', resolve, { once: true });
-        video.addEventListener('error', reject, { once: true });
+        video.addEventListener('error', error => {
+          try {
+            logs.innerText = JSON.stringify(error);
+          } catch (e) {
+            logs.innerText = "couldn't serialize error";
+          }
+        }, { once: true });
       });
     }
 
